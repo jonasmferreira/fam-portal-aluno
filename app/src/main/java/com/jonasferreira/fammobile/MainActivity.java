@@ -3,8 +3,11 @@ package com.jonasferreira.fammobile;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
 
 import im.delight.android.webview.AdvancedWebView;
 
@@ -19,7 +22,21 @@ public class MainActivity extends AppCompatActivity implements AdvancedWebView.L
 
         mWebView = (AdvancedWebView) findViewById(R.id.webview);
         mWebView.setListener(this, this);
-        mWebView.loadUrl("http://portaldoaluno.vemprafam.com.br/EducaMobile/Home/Index");
+        mWebView.loadUrl("http://portaldoaluno.vemprafam.com.br/EducaMobile/Educacional/EduAluno/EduQuadroHorarioAluno",true);
+
+        mWebView.getSettings().setSupportMultipleWindows(true);
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+                AdvancedWebView newWebView = new AdvancedWebView(MainActivity.this);
+                // myParentLayout.addView(newWebView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+                transport.setWebView(newWebView);
+                resultMsg.sendToTarget();
+                return true;
+            }
+        });
+
 
     }
 
